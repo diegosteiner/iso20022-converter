@@ -1,0 +1,58 @@
+<!doctype html>
+<html class="no-js" lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>ESR Converter</title>
+    <meta name="description" content="IMS Alumni Netzwerk">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    </style>
+    <script type='text/javascript' src='js/lib/xslt.js/xslt.js'></script>
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+    <header>
+        <h1>Zürcher IMS Alumni Netzwerk</h1>
+    </header>
+    <main>
+    <input type="file" id="input">
+    <div id='rofl'></div>
+    </main>
+  <script type="text/javascript">
+
+var reader = new FileReader();
+  reader.onload = function(e) {
+    new Transformation()
+        .setXml(reader.result)
+        .setXslt('esr.xslt')
+        .setCallback(download)
+        .transform('rofl');
+  }
+
+function download(transformation) {
+    var a = window.document.createElement('a');
+    var result = document.getElementById("rofl").innerText;
+  console.log(result);
+    a.href = window.URL.createObjectURL(new Blob([result], {type: 'text/csv'}));
+    a.download = 'test.csv';
+    a.innerText = 'Download';
+
+    // Append anchor to body.
+    document.body.appendChild(a)
+}
+
+var inputElement = document.getElementById("input");
+inputElement.addEventListener("change", handleFiles, false);
+function handleFiles() {
+    var fileList = this.files;
+    reader.readAsText(fileList[0]);
+}
+  </script>
+</body>
+
+</html>
