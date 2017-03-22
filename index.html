@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>ESR Converter</title>
-    <meta name="description" content="IMS Alumni Netzwerk">
+    <title>ISO 20022 XML Converter</title>
+    <meta name="description" content="ISO 20022 XML Converter">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
     </style>
@@ -17,11 +17,11 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
     <header>
-        <h1>Zürcher IMS Alumni Netzwerk</h1>
+        <h1>ISO 20022 XML Converter</h1>
     </header>
     <main>
     <input type="file" id="input">
-    <div id='rofl'></div>
+    <div id='result' style="display:none;"></div>
     </main>
   <script type="text/javascript">
 
@@ -31,18 +31,17 @@ var reader = new FileReader();
         .setXml(reader.result)
         .setXslt('esr.xslt')
         .setCallback(download)
-        .transform('rofl');
+        .transform('result');
   }
 
 function download(transformation) {
     var a = window.document.createElement('a');
-    var result = document.getElementById("rofl").innerText;
+    var result = document.getElementById("result").innerText;
   console.log(result);
     a.href = window.URL.createObjectURL(new Blob([result], {type: 'text/csv'}));
     a.download = 'test.csv';
     a.innerText = 'Download';
 
-    // Append anchor to body.
     document.body.appendChild(a)
 }
 
