@@ -1,63 +1,77 @@
 <!doctype html>
 <html class="no-js" lang="de">
 
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>ISO 20022 XML Converter</title>
     <meta name="description" content="ISO 20022 XML Converter">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-    </style>
-  </head>
 
-  <body>
+
+    </style>
+</head>
+
+<body>
     <!--[if lte IE 9]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
     <header>
-      <h1>ISO 20022 XML Converter</h1>
+        <h1>ISO 20022 XML Converter</h1>
     </header>
     <main>
-    <input type="file" id="input">
-    <div id='result' style="display:none;"></div>
+        <input type="file" id="input">
+        <a id="download" disabled='disabled' href="">Download</a>
     </main>
     <script type="text/javascript">
+        function transform(xml_content, xslt_url, callback) {
+            xslt = new XMLHttpRequest();
+            xslt.onreadystatechange = function() {
+                if (xslt.readyState == 4) {
+                    var xml = new DOMParser().parseFromString(xml_content, "text/xml");
+                    var processor = new XSLTProcessor();
+                    processor.importStylesheet(xslt.responseXML);
+                    var resultDoc = processor.transformToFragment(xml, document);
+                    callback(resultDoc.textContent);
+                }
+            };
+            xslt.open("GET", xslt_url);
+            xslt.send(null);
+        }
 
-var reader = new FileReader();
-reader.onload = function(e) {
-  transform(reader.result, 'esr.xslt', download);
-}
+        function download(result) {
+            var a = document.getElementById('download');
+            a.href = window.URL.createObjectURL(new Blob([result], {
+                type: 'text/csv'
+            }));
+            a.download = targetFilename();
+            a.removeAttribute('disabled');
+        }
 
-function transform(xml_content, xslt_url, callback) {
-  xslt = new XMLHttpRequest();
-  xslt.onreadystatechange = function() {
-    if (xslt.readyState == 4) {
-      var xml = new DOMParser().parseFromString(xml_content, "text/xml");
-      var processor = new XSLTProcessor();
-      processor.importStylesheet(xslt.responseXML);
-      var  resultDoc = processor.transformToFragment(xml, document);
-      callback(resultDoc.textContent);
-    }
-  };
-  xslt.open("GET", xslt_url);
-  xslt.send(null);
-}
+        function targetFilename() {
+            var regex = /^camt.054-ESR-ASR_T_CH8609000000(\d*)_\d*_0_(\d{8})(\d{8})\.xml$/g;
+            var fileName = document.getElementById("input").files[0].name;
+            var match = regex.exec(fileName);
 
-function download(result) {
-  var a = window.document.createElement('a');
-  a.href = window.URL.createObjectURL(new Blob([result], {type: 'text/csv'}));
-  a.download = 'test.csv';
-  a.innerText = 'Download';
-  document.body.appendChild(a)
-}
+            if (match !== null && match.length == 4) {
+                return 'ESR-' + match[1] + '-' + match[2] + '.csv';
+            }
+            return fileName.replace('.xml', '.csv');
+        }
 
-var inputElement = document.getElementById("input");
-inputElement.addEventListener("change", handleFiles, false);
-function handleFiles() {
-  reader.readAsText(this.files[0]);
-}
+        document.getElementById("input").addEventListener("change", handleFiles, false);
+
+        function handleFiles() {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            transform(reader.result, 'esr.xslt', download);
+        }
+
+            reader.readAsText(this.files[0]);
+        }
+
     </script>
-  </body>
+</body>
 
 </html>
