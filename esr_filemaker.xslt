@@ -14,10 +14,13 @@
         <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Verarbeitungsdatum" TYPE="DATE"/>
         <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Gutschriftdatum" TYPE="TEXT"/>
         <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Rejectcode" TYPE="TEXT"/>
-        <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Taxen" TYPE="NUMBER"/>
+        <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Taxen Transaktionwaehrung" TYPE="NUMBER"/>
+        <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Taxen Transaktionbetrag" TYPE="NUMBER"/>
         <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Name Debitor" TYPE="TEXT"/>
         <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Buchungswaehrung" TYPE="TEXT"/>
         <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Buchungbetrag" TYPE="NUMBER"/>
+        <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Taxen Buchungwaehrung" TYPE="TEXT"/>
+        <FIELD EMPTYOK="YES" MAXREPEAT="1" NAME="Taxen Buchungbetrag" TYPE="NUMBER"/>
       </METADATA>
       <RESULTSET>
         <xsl:for-each select="camt:Document/camt:BkToCstmrDbtCdtNtfctn/camt:Ntfctn/camt:Ntry">
@@ -47,7 +50,10 @@
               <COL name="Rejectcode">
                 <DATA><xsl:value-of select="normalize-space(camt:RmtInf/camt:Strd/camt:AddtlRmtInf)"/></DATA>
               </COL>
-              <COL name="Taxen">
+              <COL name="Taxen Transaktionswaehrung">
+                <DATA><xsl:value-of select="normalize-space(camt:Chrgs/camt:Rcrd/camt:Amt/@Ccy)"/></DATA>
+              </COL>
+              <COL name="Taxen Transaktionsbetrag">
                 <DATA><xsl:value-of select="normalize-space(camt:Chrgs/camt:Rcrd/camt:Amt)"/></DATA>
               </COL>
               <COL name="Name Debitor">
@@ -56,8 +62,14 @@
               <COL name="Buchungswaehrung">
                 <DATA><xsl:value-of select="normalize-space(../../camt:Amt/@Ccy)"/></DATA>
               </COL>
-              <COL name="Buchtungsbetrag">
+              <COL name="Buchungstotal">
                 <DATA><xsl:value-of select="normalize-space(../../camt:Amt)"/></DATA>
+              </COL>
+              <COL name="Taxen Buchungswaehrung">
+                <DATA><xsl:value-of select="normalize-space(../../camt:Chrgs/camt:TtlChrgsAndTaxAmt/@Ccy)"/></DATA>
+              </COL>
+              <COL name="Taxen Buchungsbetrag">
+                <DATA><xsl:value-of select="normalize-space(../../camt:Chrgs/camt:TtlChrgsAndTaxAmt)"/></DATA>
               </COL>
             </ROW>
           </xsl:for-each>
