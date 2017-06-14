@@ -63,10 +63,10 @@
         document.getElementById("input").addEventListener("change", handleFiles, false);
 
         function handleFiles() {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            transform(reader.result, 'esr.xslt', download);
-        }
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                transform(reader.result, 'esr.xslt', download);
+            }
 
             reader.readAsText(this.files[0]);
         }
