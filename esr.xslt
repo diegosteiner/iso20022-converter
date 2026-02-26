@@ -3,7 +3,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:camt2009="urn:iso:std:iso:20022:tech:xsd:camt.054.001.04"
     xmlns:camt2019="urn:iso:std:iso:20022:tech:xsd:camt.054.001.08"
-    exclude-result-prefixes="camt camt2019">
+    exclude-result-prefixes="camt2009 camt2019">
 
     <xsl:output method="text" encoding="iso-8859-1" />
 
