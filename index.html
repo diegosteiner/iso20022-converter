@@ -27,7 +27,7 @@
     <script type="text/javascript">
         function transform(xml_content, xslt_url, callback) {
             xslt = new XMLHttpRequest();
-            xslt.onreadystatechange = function() {
+            xslt.onreadystatechange = function () {
                 if (xslt.readyState == 4) {
                     var xml = new DOMParser().parseFromString(xml_content, "text/xml");
                     var processor = new XSLTProcessor();
@@ -64,7 +64,7 @@
 
         function handleFiles() {
             var reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 transform(reader.result, 'esr.xslt', download);
             }
 
